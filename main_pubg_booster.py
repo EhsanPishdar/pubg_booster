@@ -18,10 +18,9 @@ def termux_menu(title, options):
 
 # نمایش مرحله‌ای گزینه‌ها با تیک ✔ سریع‌تر
 def show_steps_fast(steps):
-    # نمایش سریع، بدون تاخیر طولانی
     for step in steps:
         os.system(f'termux-toast "✔ {step}"')
-        time.sleep(0.15)  # نصف زمان قبلی
+        time.sleep(0.12)  # سریع‌تر
 
 # تست پینگ سریع
 def ping_test():
@@ -35,17 +34,21 @@ def ping_test():
 # بهینه‌سازی اینترنت / وای‌فای سریع
 def optimize_network_fast():
     os.system("termux-toast 'بهینه‌سازی اینترنت و وای‌فای...'")
-    os.system("ndc resolver flushdefaultif 2>/dev/null")  # پاکسازی DNS کش
-    os.system("am kill-all 2>/dev/null")  # بستن برنامه‌های شبکه‌ای اضافی
+    try:
+        os.system("ndc resolver flushdefaultif 2>/dev/null")  # پاکسازی DNS کش
+        os.system("am kill-all 2>/dev/null")  # بستن برنامه‌های شبکه‌ای اضافی
+    except:
+        pass
     os.system("termux-toast 'اینترنت بهینه شد'")
 
-# اجرای بازی (اگر نتوانست، بدون ارور رد شود)
+# اجرای بازی بدون نیاز به اکتیویتی دقیق
 def launch_game_safe():
     try:
-        os.system(f'am start -n {PACKAGE_NAME}/.GameActivity 2>/dev/null')
-        time.sleep(1)  # کوتاه‌تر
+        # استفاده از دستور monkey برای اجرای بازی
+        os.system(f"monkey -p {PACKAGE_NAME} -c android.intent.category.LAUNCHER 1 2>/dev/null")
+        time.sleep(1)
     except:
-        pass  # هیچ اروری نمایش داده نشود
+        pass
 
 # بهینه‌سازی اختصاصی هر حالت سریع‌تر
 def optimize(mode):
