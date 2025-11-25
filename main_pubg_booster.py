@@ -106,5 +106,5 @@ def main_menu():
     elif choice == "کانال تلگرام":
         os.system(f'am start -a android.intent.action.VIEW -d "https://t.me/{CHANNEL_NAME}"')
 
-if name == "main":
+if __name__ == "__main__":
     main_menu()
